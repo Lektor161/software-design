@@ -2,6 +2,7 @@ package ru.akirakozov.sd.refactoring.servlet;
 
 import org.junit.Assert;
 import org.junit.Before;
+import ru.akirakozov.sd.refactoring.Model.Product;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -54,29 +55,6 @@ public abstract class AbstractProductServletTest {
             }
             Assert.assertFalse(rs.next());
             stmt.close();
-        }
-    }
-
-    public static class Product {
-        private final String name;
-        private final int price;
-
-        public Product(String name, int price) {
-            this.name = name;
-            this.price = price;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public int getPrice() {
-            return price;
-        }
-
-        @Override
-        public String toString() {
-            return String.format("%s\t%s</br>\n", name, price);
         }
     }
 }

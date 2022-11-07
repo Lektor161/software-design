@@ -3,6 +3,8 @@ package ru.akirakozov.sd.refactoring.servlet;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import ru.akirakozov.sd.refactoring.Model.Product;
+import ru.akirakozov.sd.refactoring.database.DaoProduct;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -24,7 +26,7 @@ public class QueryServletTest extends AbstractProductServletTest {
 
     @Before
     public void setup() {
-        servlet = new QueryServlet();
+        servlet = new QueryServlet(new DaoProduct("jdbc:sqlite:test.db"));
     }
 
     @Test
@@ -35,6 +37,7 @@ public class QueryServletTest extends AbstractProductServletTest {
         servlet.doGet(request, response);
         Assert.assertEquals("Unknown command: badCommand\n", testWriter.toString());
     }
+
     @Test
     public void testEmpty() throws IOException, SQLException {
         test(Collections.emptyList());
@@ -57,16 +60,16 @@ public class QueryServletTest extends AbstractProductServletTest {
             putDatabase(product);
         }
 
-        test(products.stream().max(Comparator.comparingInt(Product::getPrice)).orElse(null),
-                products.stream().min(Comparator.comparingInt(Product::getPrice)).orElse(null),
-                products.stream().map(Product::getPrice).reduce(0, Integer::sum),
+        test(products.stream().max(Comparator.comparingLong(Product::getPrice)).orElse(null),
+                products.stream().min(Comparator.comparingLong(Product::getPrice)).orElse(null),
+                products.stream().map(Product::getPrice).reduce(0L, Long::sum),
                 products.size()
         );
     }
 
-    private void test(Product max, Product min, int sum, int count) throws IOException {
-        test("max", "<h1>Product with max price: </h1>\n" + (max == null ? "" : max));
-        test("min", "<h1>Product with min price: </h1>\n" + (min == null ? "" : min));
+    private void test(Product max, Product min, long sum, int count) throws IOException {
+        test("max", "<h1>Product with max price: </h1>\n" + (max == null ? "" : max + "\n"));
+        test("min", "<h1>Product with min price: </h1>\n" + (min == null ? "" : min + "\n"));
         test("sum", "Summary price: \n" + sum + "\n");
         test("count", "Number of products: \n" + count + "\n");
     }

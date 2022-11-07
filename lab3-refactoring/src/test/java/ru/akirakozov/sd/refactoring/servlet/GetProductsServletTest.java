@@ -3,6 +3,8 @@ package ru.akirakozov.sd.refactoring.servlet;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import ru.akirakozov.sd.refactoring.Model.Product;
+import ru.akirakozov.sd.refactoring.database.DaoProduct;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -24,7 +26,7 @@ public class GetProductsServletTest extends AbstractProductServletTest {
 
     @Before
     public void setup() {
-        servlet = new GetProductsServlet();
+        servlet = new GetProductsServlet(new DaoProduct("jdbc:sqlite:test.db"));
     }
 
     @Test
@@ -51,7 +53,7 @@ public class GetProductsServletTest extends AbstractProductServletTest {
         StringBuilder expected = new StringBuilder("<html><body>\n");
         for (Product product : products) {
             putDatabase(product);
-            expected.append(product);
+            expected.append(product).append("\n");
         }
         expected.append("</body></html>\n");
 
