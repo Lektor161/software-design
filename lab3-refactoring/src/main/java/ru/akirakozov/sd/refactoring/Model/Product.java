@@ -21,4 +21,14 @@ public class Product {
     public String toString() {
         return String.format("%s\t%s</br>", name, price);
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Product) {
+            Product product = (Product) obj;
+            return this.name.equals(product.name) &&
+                    this.price == product.price;
+        }
+        return false;
+    }
 }
