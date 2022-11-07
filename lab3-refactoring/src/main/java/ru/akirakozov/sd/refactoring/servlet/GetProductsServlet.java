@@ -1,7 +1,7 @@
 package ru.akirakozov.sd.refactoring.servlet;
 
-import ru.akirakozov.sd.refactoring.Model.Product;
 import ru.akirakozov.sd.refactoring.database.DaoProduct;
+import ru.akirakozov.sd.refactoring.printer.ResponsePrinter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -18,13 +18,6 @@ public class GetProductsServlet extends AbstractProductServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        response.getWriter().println("<html><body>");
-        for (Product product: dao.getProducts()) {
-            response.getWriter().println(product);
-        }
-        response.getWriter().println("</body></html>");
-
-        response.setContentType("text/html");
-        response.setStatus(HttpServletResponse.SC_OK);
+        ResponsePrinter.printProducts(response, dao.getProducts());
     }
 }
